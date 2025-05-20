@@ -25,7 +25,7 @@ Update-IntuneAppInstalledGroup.ps1 -entraIdTenantId "12345678-1234-1234-1234-123
 
 .NOTES
 Author: Christian Schmidt
-Version: 0.1
+Version: 0.2
 
 Required permissions:
 - DeviceManagementManagedDevices.Read.All
@@ -94,23 +94,33 @@ Try {
         $intuneDetectedApps = Get-MgDeviceManagementDetectedApp -All | Where-Object { $_.DisplayName -like $applicationSearchString }
     }
 
+    $intuneDevicesWithApp = @()
+    ForEach ($intuneDetectedApp in $intuneDetectedApps ) {
+        $intuneDevices = Get-MgDeviceManagementDetectedAppManagedDevice -All -DetectedAppId $intuneDetectedApp.Id
+        ForEach ($intuneDevice in $intuneDevices) {
+            $intuneDevicesWithApp += $intuneDevice.DeviceName
+        }
+    }
+
     # Check if current members still have the app installed and remove them from group if not
     ForEach ($entraIdGroupMember in $entraIdGroupMembers) {
-        $searchDeviceInIntuneDeviceWithApp = $intuneDetectedApps | Where-Object { $_.DeviceName -eq $entraIdGroupMember.AdditionalProperties.DisplayName }
+        $searchDeviceInIntuneDeviceWithApp = $intuneDevicesWithApp | Where-Object { $_ -eq $entraIdGroupMember.AdditionalProperties.displayName }
         If ($null -eq $searchDeviceInIntuneDeviceWithApp) {
             $entraIdDevice = $null
-            $entraIdDevice = Get-MgDevice -Filter "displayname eq '$($entraIdGroupMember.AdditionalProperties.DisplayName)'"
-            Remove-MgGroupMemberByRef -GroupId $entraIdGroup.Id -DirectoryObjectId $directoryObjectId
+            $entraIdDevice = Get-MgDevice -Filter "displayname eq '$($entraIdGroupMember.AdditionalProperties.displayName)'"
+            Write-Output "Removing device $($entraIdGroupMember.AdditionalProperties.displayName) from group $entraIdGroupName"
+            Remove-MgGroupMemberByRef -GroupId $entraIdGroup.Id -DirectoryObjectId $entraIdDevice.Id
         }
     }
 
     # Add found devices to Entra ID group
-    ForEach ($intuneDetectedApp in $intuneDetectedApps) {
+    ForEach ($intuneDeviceWithApp in $intuneDevicesWithApp) {
         $intuneDeviceWithApp = $intuneDetectedApp.DeviceName
         $intuneDeviceIsInGroup = $entraIdGroupMembers | Where-Object { $_.AdditionalProperties.DisplayName -eq $intuneDeviceWithApp }
         If ($null -eq $intuneDeviceIsInGroup) {
             $entraIdDevice = $null
             $entraIdDevice = Get-MgDevice -Filter "displayname eq '$intuneDeviceWithApp'"
+            Write-Output "Adding device $intuneDeviceWithApp from group $entraIdGroupName"
             New-MgGroupMember -GroupId $entraIdGroup.Id -DirectoryObjectId $entraIdDevice.Id
         }
     }
