@@ -117,7 +117,7 @@ Try {
 
     # Add found devices to Entra ID group
     ForEach ($intuneDeviceWithApp in $intuneDevicesWithApp) {
-        $intuneDeviceIsInGroup = $entraIdGroupMembers | Where-Object { $_.AdditionalProperties.DisplayName -eq $intuneDeviceWithApp }
+        $intuneDeviceIsInGroup = $entraIdGroupMembers | Where-Object { $_.AdditionalProperties.displayName -eq $intuneDeviceWithApp }
         If ($null -eq $intuneDeviceIsInGroup) {
             $entraIdDevice = $null
             $entraIdDevice = Get-MgDevice -Filter "displayname eq '$intuneDeviceWithApp'"
