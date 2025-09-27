@@ -36,6 +36,7 @@ Required permissions:
 Required powershell modules:
 - Microsoft.Graph.Authentication
 - Microsoft.Graph.DeviceManagement
+- Microsoft.Graph.Identity.DirectoryManagement
 - Microsoft.Graph.Groups
 
 .LINK
@@ -53,6 +54,7 @@ param (
 Try {
     Import-Module Microsoft.Graph.Authentication
     Import-Module Microsoft.Graph.DeviceManagement
+    Import-Module Microsoft.Graph.Identity.DirectoryManagement
     Import-Module Microsoft.Graph.Groups
 }
 Catch {
@@ -115,7 +117,6 @@ Try {
 
     # Add found devices to Entra ID group
     ForEach ($intuneDeviceWithApp in $intuneDevicesWithApp) {
-        $intuneDeviceWithApp = $intuneDetectedApp.DeviceName
         $intuneDeviceIsInGroup = $entraIdGroupMembers | Where-Object { $_.AdditionalProperties.DisplayName -eq $intuneDeviceWithApp }
         If ($null -eq $intuneDeviceIsInGroup) {
             $entraIdDevice = $null
