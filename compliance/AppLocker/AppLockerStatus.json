@@ -27,6 +27,20 @@
                         "Description": "The enforcement mode for EXE AppLocker rules is not enforced."
                     }
                 ]
+            },
+            {
+            "SettingName":"DllPolicyEnforcementMode",
+            "Operator":"IsEquals",
+            "DataType":"string",
+            "Operand":"Enabled",
+            "MoreInfoUrl":"https://learn.microsoft.com/de-de/windows/security/application-security/application-control/app-control-for-business/applocker/applocker-overview",
+            "RemediationStrings":[ 
+                    { 
+                        "Language": "en_US",
+                        "Title": "AppLocker - DLL policy enforcement mode",
+                        "Description": "The enforcement mode for DLL AppLocker rules is not enforced."
+                    }
+                ]
             }
         ]
     }
