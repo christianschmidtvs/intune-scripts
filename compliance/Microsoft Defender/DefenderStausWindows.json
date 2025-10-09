@@ -1,0 +1,32 @@
+{
+    "Rules":[
+        {
+            "SettingName":"OnboardingState",
+            "Operator":"IsEquals",
+            "DataType":"Int64",
+            "Operand":1,
+            "MoreInfoUrl":"https://learn.microsoft.com/en-us/defender-endpoint/onboarding",
+            "RemediationStrings":[
+                {
+                    "Language":"en_US",
+                    "Title":"Defender for Endpoint not fully onboarded",
+                    "Description":"Defender for Endpoint onboarding is not completed."
+                }
+            ]
+        },
+        {
+            "SettingName":"OrgId",
+            "Operator":"IsEquals",
+            "DataType":"string",
+            "Operand":"...",
+            "MoreInfoUrl":"https://learn.microsoft.com/en-us/defender-endpoint/onboarding",
+            "RemediationStrings":[
+                {
+                    "Language":"en_US",
+                    "Title":"Defender for Endpoint not onboarded to desired orgid",
+                    "Description":"Defender for Endpoint is not onboarded to the desired organisation."
+                }
+            ]
+        }
+    ]
+}

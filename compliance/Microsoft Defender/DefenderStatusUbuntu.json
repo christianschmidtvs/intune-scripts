@@ -1,0 +1,32 @@
+{
+    "Rules":[
+        {
+            "SettingName":"health",
+            "Operator":"IsEquals",
+            "DataType":"string",
+            "Operand":"ok",
+            "MoreInfoUrl":"https://learn.microsoft.com/en-us/defender-endpoint/",
+            "RemediationStrings":[
+                {
+                    "Language":"en_US",
+                    "Title":"Defender for Endpoint is not healthy",
+                    "Description":"Defender for Endpoint health state is not ok."
+                }
+            ]
+        },
+        {
+            "SettingName":"real_time_protection_enabled",
+            "Operator":"IsEquals",
+            "DataType":"string",
+            "Operand":"ok",
+            "MoreInfoUrl":"https://learn.microsoft.com/en-us/defender-endpoint/",
+            "RemediationStrings":[
+                {
+                    "Language":"en_US",
+                    "Title":"Defender for Endpoint real time protection not enabled",
+                    "Description":"Defender for Endpoint real time protection is not enabled."
+                }
+            ]
+        }
+    ]
+}
